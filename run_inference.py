@@ -329,16 +329,22 @@ class Runner(object):
 			return triple[:, 0], triple[:, 1], triple[:, 2], label
 
 	def save_model(self, save_path):
+			# ================== 新增代码开始 ==================
+			# 获取父目录路径 (例如 ./checkpoints)
+			directory = os.path.dirname(save_path)
+			# 如果目录不存在，则递归创建
+			if not os.path.exists(directory):
+				os.makedirs(directory, exist_ok=True)
+			# ================== 新增代码结束 ==================
 
-		
-		state = {
-			'state_dict'	: self.model.state_dict(),
-			'best_val'	: self.best_val,
-			'best_epoch'	: self.best_epoch,
-			'optimizer'	: self.optimizer.state_dict(),
-			'args'		: vars(self.p)
-		}
-		torch.save(state, save_path)
+			state = {
+				'state_dict'	: self.model.state_dict(),
+				'best_val'	: self.best_val,
+				'best_epoch'	: self.best_epoch,
+				'optimizer'	: self.optimizer.state_dict(),
+				'args'		: vars(self.p)
+			}
+			torch.save(state, save_path)
 
 	def load_model(self, load_path):
 
